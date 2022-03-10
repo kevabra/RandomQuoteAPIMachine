@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+	<script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.25.0/babel.min.js"></script>
+	<title>Random Quote API Machine</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      
+class Box extends React.Component {
+
+    constructor(props) {
+      super(props);
+      this.state = {
+        quote: {}
+      };
+      this.doNewQuoteClick = this.doNewQuoteClick.bind(this);
+      this.changeQuote = this.changeQuote.bind(this);
+    }
+
+    async componentDidMount() {
+      const url = "https://api.quotable.io/random";
+      const api_call = await fetch(url);
+      const api_result = await api_call.json();
+      console.log(api_result);
+      this.setState((state, props) => { 
+        return ({
+          quote: api_result
+        });
+      });
+    }
+
+    async changeQuote() {
+      const url = "https://api.quotable.io/random";
+      const api_call = await fetch(url);
+      const api_result = await api_call.json();
+      console.log(api_result);
+      this.setState((state, props) => { 
+        return ({
+          quote: api_result
+        });
+      });
+    }
+    doNewQuoteClick(event) {
+      let colors = ['Blue', 'Pink', 'Yellow', 'Gold', "Green", "Red", "Orange", "Brown", "Gray"];
+      let randIndex = Math.floor(Math.random() * colors.length);
+      
+      this.changeQuote();
+    }
+
+    render() {
+      // background color shall be random
+      let colors = ['Blue', 'Pink', 'Yellow', 'Gold', "Green", "Red", "Orange", "Brown", "Gray"];
+      let randIndex = Math.floor(Math.random() * colors.length);
+      console.log(colors[randIndex]);
+      let quoteBoxStyle = {
+        width: "50vw",
+        backgroundColor: colors[randIndex],
+        margin: "auto",
+        marginTop: "25vh",
+        border: "1px solid white"
+      };
+
+      let buttonStyle = {
+        backgroundColor: "Black",
+        color: "white"
+      };
+      let option = "";
+      switch (quoteBoxStyle.backgroundColor) {
+        case "Blue":
+        case "Pink":
+          option = "white";
+        default:
+          option = "black";
+      }
+      let tweetStyle = {
+        color: "white",
+        backgroundColor: "black",
+        paddingBottom: "0.4vh",
+        paddingTop: 0
+      }
+
+      return (
+        <div id="quote-box" style={quoteBoxStyle}>
+          <h1 id="text">Quote: {this.state.quote.content}</h1>
+          <h1 id="author">{this.state.quote.author}</h1> 
+          <button id="new-quote"
+          onClick={this.doNewQuoteClick}
+          style={buttonStyle}
+          >New quote</button>
+          <a id="tweet-quote" href="https://twitter.com/intent/tweet" target='_blank' style={tweetStyle}>Tweet</a>
+          <h1>Random Quote Machine</h1>
+        </div>
+      );
+    }
+};
+
+ReactDOM.render(<Box/>, document.getElementById("root"));
+    </script>
+  </body>
+</html>
